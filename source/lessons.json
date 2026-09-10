@@ -1,0 +1,308 @@
+{
+  "number": 2,
+  "slug": "chess-calculate-clearly",
+  "title": "Calculate Short Lines",
+  "goal": "Compare forcing replies, keep a material count, and stop only when the position is stable.",
+  "lessons": [
+    {
+      "id": "02.1",
+      "title": "A check narrows the replies",
+      "idea": "Calculate a small tree accurately before trying a long line. At every check, test three responses: capture the checker, block the line, or move the king.",
+      "facts": [
+        "White has two rooks on the e-file. The rear rook on e1 supports the rook on e2.",
+        "Black's king has pawns on f7, g7 and h7, so it cannot escape to the seventh rank.",
+        "After Re8+, Black's rook on a8 can capture along the eighth rank."
+      ],
+      "explain": [
+        "The rook on e2 plays Re8+. Black cannot run to f8 or h8 because the rook attacks those squares; its own pawns occupy the escape squares below. There is no interposition available. ...Rxe8 is the only legal reply.",
+        "Now the e1-rook follows with Rxe8#. Capturing the first checking rook removed Black's last defender. Stop and prove mate by checking every king destination, capture and block, rather than assuming the familiar back-rank pattern is enough."
+      ],
+      "caution": "An identical-looking line may end in check instead of mate if one pawn has moved. Treat the final board as a new position and verify its legal moves.",
+      "questions": [
+        "What new escape square has the h-pawn move created?",
+        "Play the same exchange on e8. Is the second rook capture checkmate?",
+        "What has White gained even if Black survives?"
+      ],
+      "answers": [
+        "The pawn on h6 leaves h7 empty. Unlike the seventh-rank squares occupied by pawns in Model A, h7 can be a legal king destination.",
+        "Re8+ Rxe8 Rxe8+ is check, but Black has ...Kh7. The rook on e8 attacks the eighth rank, not h7. A plus sign is correct; a mate sign is not.",
+        "White began with two rooks against one and finishes with one rook against none. That is a winning material advantage in this simple position, but it still requires conversion. The calculation must report that result accurately instead of calling it mate."
+      ],
+      "transfer": "For three checking sequences from your games, set up the final position and list every legal reply. Mark where you stopped calculating too early.",
+      "recall": [
+        "What are the three kinds of reply to a check?",
+        "Capture the checking piece, block a line check, or move the king to a safe square."
+      ],
+      "positions": {
+        "A": {
+          "fen": "r5k1/pp3ppp/8/8/8/8/PP2RPPP/4R1K1 w - - 0 1",
+          "opening_moves": "",
+          "line": "Re8+ Rxe8 Rxe8#",
+          "alternative": "",
+          "purpose": "mate",
+          "validation": {
+            "id": "02.1A",
+            "title": "A check narrows the replies",
+            "fen": "r5k1/pp3ppp/8/8/8/8/PP2RPPP/4R1K1 w - - 0 1",
+            "line": "Re8+ Rxe8 Rxe8#",
+            "bad": "",
+            "checkmate": true,
+            "stalemate": false,
+            "candidates": [
+              {
+                "san": "Re8+",
+                "score": "#+2",
+                "depth": 18
+              },
+              {
+                "san": "Kf1",
+                "score": "+795",
+                "depth": 18
+              },
+              {
+                "san": "Re7",
+                "score": "+794",
+                "depth": 18
+              }
+            ],
+            "chosen_score": "#+2"
+          }
+        },
+        "B": {
+          "fen": "r5k1/pp3pp1/7p/8/8/8/PP2RPPP/4R1K1 w - - 0 1",
+          "opening_moves": "",
+          "line": "Re8+ Rxe8 Rxe8+ Kh7",
+          "alternative": "",
+          "purpose": "contrast",
+          "validation": {
+            "id": "02.1B",
+            "title": "A check narrows the replies",
+            "fen": "r5k1/pp3pp1/7p/8/8/8/PP2RPPP/4R1K1 w - - 0 1",
+            "line": "Re8+ Rxe8 Rxe8+ Kh7",
+            "bad": "",
+            "checkmate": false,
+            "stalemate": false,
+            "candidates": [
+              {
+                "san": "Re8+",
+                "score": "+836",
+                "depth": 18
+              },
+              {
+                "san": "Re7",
+                "score": "+782",
+                "depth": 18
+              },
+              {
+                "san": "Kf1",
+                "score": "+776",
+                "depth": 18
+              }
+            ],
+            "chosen_score": "+836"
+          }
+        }
+      }
+    },
+    {
+      "id": "02.2",
+      "title": "Compare the recaptures that really exist",
+      "idea": "Before comparing moves, list only moves that are legal in the actual position. A recapture can restore material yet cost time if it exposes the queen to development with an attack.",
+      "facts": [
+        "White's pawn on d5 has just captured Black's d-pawn.",
+        "Black's e6-pawn can capture diagonally to d5.",
+        "The queen on d8 can also reach d5, but may become a target for Nc3."
+      ],
+      "explain": [
+        "...exd5 restores material and puts a pawn in the center without exposing the queen. White and Black can then develop with Nf3 and ...Nf6. This is a sound, uncomplicated choice in the French Exchange structure.",
+        "Compare ...Qxd5 Nc3: White develops a knight while attacking the queen. Black must account for that threat. The queen recapture is legal and does not lose the queen by force; it is less convenient here because the pawn recapture accomplishes the job without that extra target."
+      ],
+      "caution": "\"Never recapture with the queen\" is too broad. In another opening the alternative pawn recapture may not exist, and an early queen move may be a normal part of the plan.",
+      "questions": [
+        "Can Black play ...exd5 in this position? Explain using the pawn's starting square.",
+        "Show a legal immediate recapture and White's developing attack on it.",
+        "Name a safe queen square after that attack."
+      ],
+      "answers": [
+        "No. The e-pawn is still on e7, and from there it captures d6 or f6, not d5. You cannot transfer the French recapture to the Scandinavian position.",
+        "...Qxd5 regains the pawn. Nc3 develops with an attack on the queen. Black can also choose the different Scandinavian approach ...Nf6; this lesson examines the immediate queen recapture.",
+        "...Qa5 is a legal, established retreat. The queen travels d5-c5-b5-a5. It remains active while Black prepares development. The move costs a tempo, but that fact alone does not refute the opening."
+      ],
+      "transfer": "After an exchange, list every legal recapture. Compare material first, king safety second, and the opponent's next developing attack third.",
+      "recall": [
+        "Why is ...exd5 available in the French example but not the Scandinavian?",
+        "The French e-pawn is on e6, attacking d5. The Scandinavian e-pawn is still on e7."
+      ],
+      "positions": {
+        "A": {
+          "fen": "rnbqkbnr/ppp2ppp/4p3/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+          "opening_moves": "e4 e6 d4 d5 exd5",
+          "line": "exd5 Nf3 Nf6",
+          "alternative": "Qxd5 Nc3",
+          "purpose": "comparison",
+          "validation": {
+            "id": "02.2A",
+            "title": "Compare the recaptures that really exist",
+            "fen": "rnbqkbnr/ppp2ppp/4p3/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+            "line": "exd5 Nf3 Nf6",
+            "bad": "Qxd5 Nc3",
+            "checkmate": false,
+            "stalemate": false,
+            "candidates": [
+              {
+                "san": "exd5",
+                "score": "-16",
+                "depth": 18
+              },
+              {
+                "san": "Qxd5",
+                "score": "-83",
+                "depth": 18
+              },
+              {
+                "san": "Nf6",
+                "score": "-104",
+                "depth": 18
+              }
+            ],
+            "chosen_score": "-16"
+          }
+        },
+        "B": {
+          "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+          "opening_moves": "e4 d5 exd5",
+          "line": "Qxd5 Nc3 Qa5",
+          "alternative": "",
+          "purpose": "comparison",
+          "validation": {
+            "id": "02.2B",
+            "title": "Compare the recaptures that really exist",
+            "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+            "line": "Qxd5 Nc3 Qa5",
+            "bad": "",
+            "checkmate": false,
+            "stalemate": false,
+            "candidates": [
+              {
+                "san": "Nf6",
+                "score": "-61",
+                "depth": 18
+              },
+              {
+                "san": "c6",
+                "score": "-71",
+                "depth": 18
+              },
+              {
+                "san": "Qxd5",
+                "score": "-72",
+                "depth": 18
+              }
+            ],
+            "chosen_score": "-72"
+          }
+        }
+      }
+    },
+    {
+      "id": "02.3",
+      "title": "Look for a check before recapturing",
+      "idea": "A recapture is a candidate, not an obligation. An in-between move can be stronger when it gives check and forces the opponent to answer before recovering material.",
+      "facts": [
+        "The rooks on c8 and c1 face each other on an otherwise clear file.",
+        "Black's e6-pawn can capture the knight on d5.",
+        "White's king can answer a back-rank check by going to h2 because its h-pawn is on h3."
+      ],
+      "explain": [
+        "Black first plays ...Rxc1+. White must answer the check and cannot save the knight at the same time. After Kh2, ...exd5 collects the knight as well. Put the check before the pawn capture.",
+        "Count the full sequence: Black captures a rook and then a knight while keeping its own rook. Reversing the order is disastrous because White's rook gains access to Black's unprotected back rank. Move order is the entire tactic."
+      ],
+      "caution": "After ...exd5? White has Rxc8#. Black's king is boxed in by its own pawns. Do not assume that recapturing an exposed piece is urgent enough to skip a check scan.",
+      "questions": [
+        "Which pawn changed, and which white king escape did that remove?",
+        "What is Black's strongest forcing move?",
+        "Should Black plan to take the knight on the next move?"
+      ],
+      "answers": [
+        "White's h-pawn is now on h2. The king cannot move onto its own pawn, so the h2 escape from Model A has disappeared.",
+        "...Rxc1# is immediate checkmate. The rook checks along the first rank, White cannot capture or block, and the king has no safe destination.",
+        "There is no next move: the game has ended. Capturing the knight is irrelevant. A good calculation reports the earliest decisive result rather than automatically completing a memorized sequence."
+      ],
+      "transfer": "Before every automatic recapture in a training game, pause for checks on both sides. Save one example where the order of two moves changed the result.",
+      "recall": [
+        "What makes an in-between check especially forcing?",
+        "The opponent must answer the check immediately, which may deny time to save another threatened piece."
+      ],
+      "positions": {
+        "A": {
+          "fen": "2r3k1/pp3ppp/4p3/3N4/8/7P/PP3PP1/2R3K1 b - - 0 1",
+          "opening_moves": "",
+          "line": "Rxc1+ Kh2 exd5",
+          "alternative": "exd5 Rxc8#",
+          "purpose": "tactic",
+          "validation": {
+            "id": "02.3A",
+            "title": "Look for a check before recapturing",
+            "fen": "2r3k1/pp3ppp/4p3/3N4/8/7P/PP3PP1/2R3K1 b - - 0 1",
+            "line": "Rxc1+ Kh2 exd5",
+            "bad": "exd5 Rxc8#",
+            "checkmate": false,
+            "stalemate": false,
+            "candidates": [
+              {
+                "san": "Rxc1+",
+                "score": "+801",
+                "depth": 18
+              },
+              {
+                "san": "Rd8",
+                "score": "-565",
+                "depth": 18
+              },
+              {
+                "san": "Re8",
+                "score": "-597",
+                "depth": 18
+              }
+            ],
+            "chosen_score": "+861"
+          }
+        },
+        "B": {
+          "fen": "2r3k1/pp3ppp/4p3/3N4/8/8/PP3PPP/2R3K1 b - - 0 1",
+          "opening_moves": "",
+          "line": "Rxc1#",
+          "alternative": "",
+          "purpose": "mate",
+          "validation": {
+            "id": "02.3B",
+            "title": "Look for a check before recapturing",
+            "fen": "2r3k1/pp3ppp/4p3/3N4/8/8/PP3PPP/2R3K1 b - - 0 1",
+            "line": "Rxc1#",
+            "bad": "",
+            "checkmate": true,
+            "stalemate": false,
+            "candidates": [
+              {
+                "san": "Rxc1#",
+                "score": "#+1",
+                "depth": 18
+              },
+              {
+                "san": "Re8",
+                "score": "-554",
+                "depth": 18
+              },
+              {
+                "san": "Rd8",
+                "score": "-595",
+                "depth": 18
+              }
+            ],
+            "chosen_score": "#+1"
+          }
+        }
+      }
+    }
+  ]
+}
